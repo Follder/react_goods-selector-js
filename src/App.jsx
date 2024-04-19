@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-expressions */
-/* eslint-disable prefer-const */
+
 import 'bulma/css/bulma.css';
 import { useState } from 'react';
 import './App.scss';
@@ -18,7 +18,7 @@ export const goods = [
 ];
 
 export const App = () => {
-  let [value, setValue] = useState('Jam');
+  const [value, setValue] = useState('Jam');
 
   return (
     <main className="section container">
@@ -29,7 +29,7 @@ export const App = () => {
             data-cy="ClearButton"
             type="button"
             className="delete ml-3"
-            onClick={() => setValue((value = null))}
+            onClick={() => setValue(null)}
           />
         </h1>
       ) : (
@@ -40,32 +40,34 @@ export const App = () => {
 
       <table className="table">
         <tbody>
-          {goods.map(good => (
-            <tr
-              data-cy="Good"
-              key={good}
-              className={value === good && 'has-background-success-light'}
-            >
-              <td>
-                <button
-                  data-cy={value === good ? 'RemoveButton' : 'AddButton'}
-                  type="button"
-                  className={value === good ? 'button is-info' : 'button'}
-                  onClick={() => {
-                    value !== good
-                      ? setValue((value = good))
-                      : setValue((value = null));
-                  }}
-                >
-                  {value === good ? '-' : '+'}
-                </button>
-              </td>
+          {goods.map(good => {
+            const isGood = value === good;
 
-              <td data-cy="GoodTitle" className="is-vcentered">
-                {good}
-              </td>
-            </tr>
-          ))}
+            return (
+              <tr
+                data-cy="Good"
+                key={good}
+                className={isGood && 'has-background-success-light'}
+              >
+                <td>
+                  <button
+                    data-cy={isGood ? 'RemoveButton' : 'AddButton'}
+                    type="button"
+                    className={isGood ? 'button is-info' : 'button'}
+                    onClick={() => {
+                      !isGood ? setValue(good) : setValue(null);
+                    }}
+                  >
+                    {isGood ? '-' : '+'}
+                  </button>
+                </td>
+
+                <td data-cy="GoodTitle" className="is-vcentered">
+                  {good}
+                </td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     </main>
